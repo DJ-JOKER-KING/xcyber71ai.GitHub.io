@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wingo 50s VIP Access</title>
+<style>
+  body {
+    margin: 0;
+    background: #000;
+    font-family: 'Orbitron', sans-serif;
+    color: #0ff;
+    text-align: center;
+  }
+  .container {
+    padding: 20px;
+    border: 2px solid #0ff;
+    margin: 20px auto;
+    border-radius: 15px;
+    max-width: 480px;
+  }
+  h1 {
+    color: #0ff;
+    font-size: 2rem;
+  }
+  .info, .result-box {
+    margin: 15px 0;
+    padding: 10px;
+    border: 1px solid #0ff;
+    border-radius: 10px;
+  }
+  .server-btn {
+    margin: 5px;
+    padding: 10px 15px;
+    background: black;
+    border: 1px solid cyan;
+    border-radius: 8px;
+    color: cyan;
+    cursor: pointer;
+  }
+  .server-btn.active {
+    background: cyan;
+    color: black;
+  }
+  .result-line {
+    font-size: 1.2rem;
+    margin: 10px 0;
+  }
+  #showBtn {
+    padding: 12px 24px;
+    background: lime;
+    border: none;
+    border-radius: 10px;
+    color: black;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #showBtn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    color: #ccc;
+  }
+  #footer {
+    font-size: 0.8rem;
+    color: #0ff;
+    margin-top: 30px;
+  }
+  #history {
+    font-size: 0.95rem;
+    text-align: left;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #0ff;
+    border-radius: 10px;
+  }
+  .history-item {
+    border-bottom: 1px solid #0ff;
+    padding: 4px 0;
+  }
+  .red {
+    color: red;
+  }
+  .green {
+    color: lime;
+  }
+  .timestamp {
+    font-size: 0.8rem;
+    color: gray;
+    margin-left: 5px;
+  }
+  #serverStatus {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+  }
+  #serverStatus.online {
+    background-color: limegreen;
+    color: black;
+  }
+  #serverStatus.offline {
+    background-color: red;
+    color: white;
+  }
+  .animate {
+    animation: popIn 0.4s ease;
+  }
+  .color-flash {
+    animation: flashColor 0.8s ease-in-out;
+  }
+  .spin {
+    animation: spinIn 0.5s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes flashColor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+  @keyframes spinIn {
+    from { transform: rotateY(360deg); opacity: 0; }
+    to { transform: rotateY(0deg); opacity: 1; }
+  }
+  /* Login styles */
+  #loginContainer {
+    max-width: 320px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 2px solid cyan;
+    border-radius: 12px;
+    background: #111;
+  }
+  #loginContainer input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid cyan;
+    background: #000;
+    color: #0ff;
+    font-size: 1rem;
+    text-align: center;
+  }
+  #loginBtn {
+    width: 95%;
+    padding: 12px;
+    background: lime;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: black;
+  }
+  #logoutBtn {
+    margin-top: 10px;
+    padding: 8px 18px;
+    background: red;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+  }
+  #loginError {
+    color: #f33;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN FORM -->
+<div id="loginContainer">
+  <h2>Login to XCYBER71 VIP Access</h2>
+  <input type="text" id="username" placeholder="Username" autocomplete="off" />
+  <input type="password" id="password" placeholder="Password" autocomplete="off" />
+  <button id="loginBtn" onclick="login()">Login</button>
+  <div id="loginError"></div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container" id="gameContainer" style="display:none;">
+  <h1>XCYBER71 VIP HACK</h1>
+
+  <div class="info">
+    PHONE : <span id="phone">vivo V2352</span>
+  </div>
+
+  <div class="info">
+    <button class="server-btn" onclick="selectServer(1, event)">Server 1</button>
+    <button class="server-btn" onclick="selectServer(2, event)">Server 2</button>
+    <button class="server-btn" onclick="selectServer(3, event)">Server 3</button>
+    <p>Selected Server: <span id="selected">no server is select</span>
+      <span id="serverStatus" class="">--</span>
+    </p>
+  </div>
+
+  <div class="info">
+    OWNER AMINUL - <span id="OWNER AMINUL">XCYBER71</span><br>
+    Time Left : <span id="timer">00:50</span>
+  </div>
+
+  <button id="showBtn" onclick="showResult()">SHOW RESULT</button>
+  <button id="logoutBtn" onclick="logout()">Logout</button>
+
+  <div class="result-box">
+    <div class="result-line">Result :- <span id="result">--</span></div>
+    <div class="result-line">Colour :- <span id="colour">--</span></div>
+    <div class="result-line">Numbers :- <span id="number">--</span></div>
+  </div>
+
+  <div class="result-box">
+    <h3>Result History (Last 10)</h3>
+    <div id="history"></div>
+  </div>
+
+  <div id="footer">MAKE BY xcyber71ok@gmail.com</div>
+</div>
+
+<script>
+  // Hardcoded VIP users (username: password)
+  const VIP_USERS = {
+    "aminul": "1234",
+    "xcyber71": "pass123",
+    "vipuser": "vipaccess"
+  };
+
+  let selectedServer = '';
+  let countdown;
+  let time = 50;
+  let allowManual = true;
+  let historyList = [];
+  let serverOnline = false;
+
+  // LOGIN SYSTEM
+  function login() {
+    const usernameInput = document.getElementById('username').value.trim().toLowerCase();
+    const passwordInput = document.getElementById('password').value;
+
+    if (VIP_USERS[usernameInput] && VIP_USERS[usernameInput] === passwordInput) {
+      // success
+      document.getElementById('loginError').textContent = '';
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('gameContainer').style.display = 'block';
+
+      // Save login state to sessionStorage (simple)
+      sessionStorage.setItem('vipUser', usernameInput);
+
+      // start timer & init UI
+      resetGame();
+    } else {
+      document.getElementById('loginError').textContent = 'Invalid username or password.';
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem('vipUser');
+    clearInterval(countdown);
+    document.getElementById('gameContainer').style.display = 'none';
+    document.getElementById('loginContainer').style.display = 'block';
+    resetUI();
+  }
+
+  // Check login on page load
+  window.onload = function() {
+    const vipUser = sessionStorage.getItem('vipUser');
+    if (vipUser && VIP_USERS[vipUser]) {
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('gameContainer').style.display = 'block';
+      resetGame();
+    }
+  };
+
+  // Reset game UI & variables
+  function resetGame() {
+    selectedServer = '';
+    time = 50;
+    allowManual = true;
+    historyList = [];
+    serverOnline = false;
+    document.getElementById('selected').textContent = 'no server is select';
+    document.getElementById('timer').textContent = '00:50';
+    document.getElementById('result').textContent = '--';
+    document.getElementById('colour').textContent = '--';
+    document.getElementById('number').textContent = '--';
+    document.getElementById('history').innerHTML = '';
+    document.getElementById('serverStatus').textContent = '--';
+    document.getElementById('serverStatus').className = '';
+    document.getElementById('showBtn').disabled = true;
+
+    clearInterval(countdown);
+    updateTimer();
+  }
+
+  function resetUI() {
+    // clear inputs and errors on logout
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('loginError').textContent = '';
+  }
+
+  function selectServer(num, event) {
+    selectedServer = 'Server ' + num;
+    document.getElementById('selected').textContent = selectedServer;
+    document.querySelectorAll('.server-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    checkServerStatus(num);
+
+    time = 50;
+    clearInterval(countdown);
+    updateTimer();
+  }
+
+  function checkServerStatus(serverNum) {
+    const statusEl = document.getElementById('serverStatus');
+    statusEl.textContent = 'Checking...';
+    statusEl.className = '';
+    document.getElementById('showBtn').disabled = true;
+
+    setTimeout(() => {
+      // 70% chance online demo
+      serverOnline = Math.random() > 0.3;
+
+      if (serverOnline) {
+        statusEl.textContent = 'Online';
+        statusEl.className = 'online';
+        document.getElementById('showBtn').disabled = false;
+      } else {
+        statusEl.textContent = 'Offline';
+        statusEl.className = 'offline';
+        document.getElementById('showBtn').disabled = true;
+      }
+    }, 1200);
+  }
+
+  function getCurrentTime() {
+    const now = new Date();
+    let h = now.getHours();
+    let m = now.getMinutes();
+    let ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    h = h ? h : 12;
+    m = m < 10 ? '0' + m : m;
+    return `${h}:${m} ${ampm}`;
+  }
+
+  function generateResult() {
+    if (!serverOnline) {
+      alert("Cannot generate result: Server is Offline!");
+      return;
+    }
+
+    const number = Math.floor(Math.random() * 10);
+    const result = number >= 5 ? 'BIG' : 'SMALL';
+    const colours = ['RED', 'GREEN'];
+    const colour = colours[Math.floor(Math.random() * colours.length)];
+    const timestamp = getCurrentTime();
+
+    const resultEl = document.getElementById('result');
+    const colourEl = document.getElementById('colour');
+    const numberEl = document.getElementById('number');
+
+    resultEl.textContent = result;
+    colourEl.textContent = colour;
+    numberEl.textContent = number;
+
+    resultEl.classList.add('animate');
+    colourEl.classList.add('color-flash');
+    numberEl.classList.add('spin');
+
+    setTimeout(() => {
+      resultEl.classList.remove('animate');
+      colourEl.classList.remove('color-flash');
+      numberEl.classList.remove('spin');
+    }, 800);
+
+    const historyEntry = { result, colour, number, timestamp };
+    historyList.unshift(historyEntry);
+    if (historyList.length > 10) historyList.pop();
+
+    updateHistoryUI();
+  }
+
+  function updateHistoryUI() {
+    const historyDiv = document.getElementById('history');
+    historyDiv.innerHTML = '';
+    historyList.forEach(entry => {
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      const colorClass = entry.colour === 'RED' ? 'red' : 'green';
+      div.innerHTML = `<strong>${entry.result}</strong> | <span class="${colorClass}">${entry.colour}</span> | ${entry.number} <span class="timestamp">(${entry.timestamp})</span>`;
+      historyDiv.appendChild(div);
+    });
+  }
+
+  function showResult() {
+    if (!selectedServer) {
+      alert("Please select a server first.");
+      return;
+    }
+    if (!serverOnline) {
+      alert("Cannot generate result: Server is Offline!");
+      return;
+    }
+    if (!allowManual) {
+      alert("Please wait 50 seconds before showing result again.");
+      return;
+    }
+    allowManual = false;
+    generateResult();
+    setTimeout(() => { allowManual = true; }, 50000);
+  }
+
+  function updateTimer() {
+    countdown = setInterval(() => {
+      time--;
+      let m = Math.floor(time / 60);
+      let s = time % 60;
+      document.getElementById('timer').textContent = `0${m}:${s < 10 ? '0' + s : s}`;
+      if (time <= 0) {
+        time = 50;
+        if (serverOnline) {
+          allowManual = false;
+          generateResult();
+          setTimeout(() => { allowManual = true; }, 50000);
+        }
+      }
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>
